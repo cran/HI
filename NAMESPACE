@@ -1,0 +1,3 @@
+useDynLib(HI)
+
+export(arms,convex.bounds,rballunif,trans.dens,trans.up)
