@@ -1,3 +1,4 @@
 useDynLib(HI)
 
-export(arms,convex.bounds,rballunif,trans.dens,trans.up)
+export(arms,convex.bounds,rballunif,trans.dens,trans.up,
+       trans2,transBack2,transUp2)

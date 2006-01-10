@@ -4,6 +4,7 @@
 ####
 
 lpi <- log(get("pi", envir=NULL))
+lsqPi <- log(sqrt(base::pi))
 
 rballunif <- function(n, d) {
     ## generate a point uniformly in the n-dimensional ball
@@ -178,4 +179,114 @@ function(x, ldens.list, which.models, ...) {
     }
     return(ans)
 }
+
+### transformed log density for the mixture of two components
+"trans2" <-
+function(y, ldens.list, k, ...) {
+    ## 'y' is a vector
+    ## returns also the model index of the vector 'y'
+    if (length(ldens.list) != 2 || length(k) != 1)
+        stop("ldens.list must have length 2\nand k must have length 1")
+    n <- length(y)
+    h <- n - k # dimension of submodel 'k'
+    if (h==0)
+    {
+        ldk <- ldens.list[[2]](...)
+        if ( is.infinite(ldk) && ldk < 0 )
+            return(c(ldens.list[[1]](y,...), 0))
+        ld0 <- ldens.list[[1]](rep(0,n),...)
+    }
+    else
+    {
+        ldk <- ldens.list[[2]](y[1:h],...)  
+        if ( is.infinite(ldk) && ldk < 0 )
+            return(c(ldens.list[[1]](y,...), 0))
+        ld0 <- ldens.list[[1]](c(y[1:h],rep(0,k)),...)
+    }
+    if ( is.infinite(ld0) && ld0 < 0 )
+        stop(paste("ldens.list[[1]] may not take the value",ld0))
+    u <-  ldk - ld0 + lgamma(k/2 + 1) - k*lsqPi -
+        0.5 * k * log(crossprod(y[(n-k+1):n]))
+    if ( u > 0 )
+        return(c(ld0, k))
+    else 
+        return(c(ldens.list[[1]](y * rep(c(1,(1-exp(u))^(1/k)),c(h,k)),...), 0))
+}
+
+### Map points in the auxiliary space back to the original one
+"transBack2" <-
+function(y, ldens.list, k, ...) {
+    ## 'y' is a vector or a matrix
+    ## back.transform not implemented yet
+    ## returns also the model index of the vector 'y'
+    if (length(ldens.list) != 2 || length(k) != 1)
+        stop("ldens.list must have length 2\nand k must have length 1")
+    if ( !is.null(dim(y)) )
+    {
+        ans <- matrix(0,NROW(y),NCOL(y))
+        for (i in 1:NROW(ans))
+            ans[i,] <- Recall(y[i,], ldens.list, k, ...)
+        return(ans)
+    }
+    n <- length(y)
+    h <- n - k # dimension of submodel 'k' 
+    if (h==0)
+    {
+        ldk <- ldens.list[[2]](...)
+        if ( is.infinite(ldk) && ldk < 0 )
+            return(y)
+        z <- rep(0,n)
+    }
+    else
+    {
+        ldk <- ldens.list[[2]](y[1:h],...)  
+        if ( is.infinite(ldk) && ldk < 0 )
+            return(y)
+        z <- c(y[1:h],rep(0,k))
+    }
+    ld0 <- ldens.list[[1]](z, ...)
+    if ( is.infinite(ld0) && ld0 < 0 )
+        stop(paste("ldens.list[[1]] may not take the value",ld0))
+    u <-  ldk - ld0 + lgamma(k/2 + 1) - k*lsqPi -
+        0.5 * k * log(crossprod(y[(n-k+1):n]))
+    if ( u > 0 )
+        return(z)
+    else 
+        return(y * rep(c(1,(1-exp(u))^(1/k)),c(h,k)))
+}
+
+"transUp2" <-
+function(y, ldens.list, k, ...) {
+    ## 'y' is a vector
+    n <- length(y)
+    h <- n - k # dimension of submodel 'k' 
+    ind.h <- seq(1,length.out=h)
+    if (h==0)
+    {
+        ldk <- ldens.list[[2]](...)
+        if ( is.infinite(ldk) && ldk < 0 ) return(y)
+        ld0 <- ldens.list[[1]](rep(0,n),...)
+    }
+    else
+    {
+        ldk <- ldens.list[[2]](y[ind.h],...)  
+        if ( is.infinite(ldk) && ldk < 0 ) return(y)
+        ld0 <- ldens.list[[1]](c(y[ind.h],rep(0,k)),...)
+    }
+    if ( is.infinite(ld0) && ld0 < 0 )
+        stop(paste("ldens.list[[1]] may not take the value",ld0))
+    r <-  ldk - ld0 + lgamma(k/2 + 1) - k*lsqPi 
+    u <- r - 0.5 * k * log(crossprod(y[(n-k+1):n]))
+    if ( u > 0 )
+    {
+        ## model 'k'
+        return( c(y[ind.h], rballunif(k,exp(r/k))) )
+    }
+    else
+    {
+        ## model '0'
+        return( y * rep(c(1,(1-exp(u))^(1/k)),c(h,k)) )
+        
+    }
+}    
 

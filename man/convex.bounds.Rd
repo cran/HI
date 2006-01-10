@@ -7,7 +7,7 @@ straight line, using a bisection approach. It is mainly intended for
 use within \code{\link{arms}}.
 }
 \usage{
-convex.bounds(x, dir, indFunc, ..., tol=1e-05)
+convex.bounds(x, dir, indFunc, ..., tol=1e-07)
 }
 \arguments{
   \item{x}{A point within the set}

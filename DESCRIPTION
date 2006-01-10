@@ -1,11 +1,11 @@
 Package: HI
 Title: Simulation from distributions supported by nested hyperplanes
-Version: 0.1-1
-Date: 2005-04-29
+Version: 0.2
+Date: 2006-01-10
 Author: Giovanni Petris <GPetris@Uark.edu> and 
   Luca Tardella <luca.tardella@@uniroma1.it>; original C code 
   for ARMS by Wally Gilks.
-Maintainer: ORPHANED
+Maintainer: Giovanni Petris <GPetris@Uark.edu>
 Depends: R (>= 1.7.0)
 Description: Simulation from distributions supported by nested hyperplanes,
   using the algorithm described in Petris & Tardella, "A geometric approach to
@@ -13,4 +13,4 @@ Description: Simulation from distributions supported by nested hyperplanes,
   v.31, n.4, (2003).  
   Also random direction multivariate Adaptive Rejection Metropolis Sampling.
 License: GPL version 2 or newer 
-Packaged: Fri Apr 29 16:07:43 2005; hornik
+Packaged: Tue Jan 10 11:11:49 2006; gpetris

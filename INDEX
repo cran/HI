@@ -1,7 +1,0 @@
-arms                    Function to perform Adaptive Rejection
-                        Metropolis Sampling
-convex.bounds           Function to find the boundaries of a convex
-                        set
-rballunif               Function to generate a random vector uniformly
-                        distributed in a sphere
-trans.dens              Functions for transdimensional MCMC

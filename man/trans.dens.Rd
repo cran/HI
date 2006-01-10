@@ -1,6 +1,9 @@
 \name{trans.dens}
 \alias{trans.dens}
 \alias{trans.up}
+\alias{trans2}
+\alias{transUp2}
+\alias{transBack2}
 \title{Functions for transdimensional MCMC}
 \description{
 Computes the value of the 'g' density at a given point and, optionally, 
@@ -10,6 +13,9 @@ belongs.
 \usage{
 trans.dens(y, ldens.list, which.models, ..., back.transform=F)
 trans.up(x, ldens.list, which.models, ...)
+trans2(y, ldens.list, k, ...) 
+transUp2(y, ldens.list, k, ...) 
+transBack2(y, ldens.list, k, ...) 
 }
 \arguments{
   \item{y}{Vector or matrix of points (by row) at which the 
@@ -22,9 +28,12 @@ trans.up(x, ldens.list, which.models, ...)
     the density in \code{which.models} in the corresponding position.
     A first element equal 0 (full model) is added if not already present}
   \item{back.transform}{Logical that determines the output}
+  \item{k}{Difference between the dimension of the larger model and the 
+    dimension of the smaller model} 
   \item{...}{Other arguments passed to the functions in \code{ldens.list}}
 }
-\details{See the reference for details}
+\details{See the reference for details. The functions with the 2 in the name operate 
+   on pairs of models only.}
 \value{
    If \code{back.transform=F}, \code{trans.dens} returns the density
    of the absolutely continuous auxiliary distribution evaluated 
@@ -37,7 +46,7 @@ trans.up(x, ldens.list, which.models, ...)
 }
 \references{Petris \& Tardella, A geometric approach to transdimensional Markov
   chain Monte Carlo.
-   \emph{The Canadian Journal of Statistics}, vol.31, n.4, (2003) (?). }
+   \emph{The Canadian Journal of Statistics}, vol.31, n.4, (2003). }
 \author{Giovanni Petris \email{GPetris@uark.edu}, Luca Tardella}
 
 \examples{
@@ -60,6 +69,7 @@ x <- rmix[,-(1:2)]
 plot(x, col=rmix[,2]+3, asp=1,
      main="The sample transformed back to the original space")
 ### trans.up as a right inverse of trans.dens
+set.seed(6324)
 y <- trans.up(x, ldens.list, 0:2)
 stopifnot(all.equal(x, trans.dens(y, ldens.list, 0:2, back.transform=TRUE)[,-(1:2)]))
 
@@ -68,6 +78,25 @@ z <- trans.up(matrix(0,1000,2), ldens.list, 0:2)
 plot(z,asp=1,col=5) # should look uniform in a circle corresponding to model 2
 z <- trans.up(cbind(runif(1000,-3,3),0), ldens.list, 0:2)
 plot(z,asp=1,col=4) # should look uniform in a region corresponding to model 1
+
+### trans2, transBack2
+ldens.list <- list(f0 = function(x) sum(dnorm(x,log=TRUE)),
+                   f1 = function(x) dnorm(x,log=TRUE))
+trans.mix <- function(y) {
+    trans2(y, ldens.list=ldens.list, k=1)[-2]
+}
+trans.rmix <- arms(c(0,0), trans.mix, function(x) crossprod(x)<1e2, 1000)
+rmix <- transBack2(y=trans.rmix, ldens.list=ldens.list, k=1)
+table(rmix[,2]==0)/nrow(rmix) # should be about equally distributed
+plot(trans.rmix,col=(rmix[,2]==0)+3,asp=1, xlab="y.1", ylab="y.2",
+     main="A sample from the auxiliary continuous distribution")
+plot(rmix, col=(rmix[,2]==0)+3, asp=1,
+     main="The sample transformed back to the original space")
+
+### trunsUp2
+z <- t(sapply(1:1000, function(i) transUp2(c(-2+0.004*i,0), ldens.list, 1)))
+plot(z,asp=1,col=2)
+
 }
 \keyword{distribution}
 
