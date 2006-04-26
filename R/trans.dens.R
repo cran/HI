@@ -3,7 +3,7 @@
 #### (see Petris & Tardella)
 ####
 
-lpi <- log(get("pi", envir=NULL))
+lpi <- log(base::pi)
 lsqPi <- log(sqrt(base::pi))
 
 rballunif <- function(n, d) {
