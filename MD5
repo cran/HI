@@ -1,10 +1,11 @@
-b046c9dcba9939c7588fbb30f8736b84 *DESCRIPTION
-76ed50a845f843117a5b3dc8705aa90b *NAMESPACE
+4196b2735438951c1eafc4c44ef26071 *DESCRIPTION
+1947565a65b77a0cb6e29df451cadccd *NAMESPACE
 5e5e2a21480778c49c4c7abb9d2c6051 *R/arms.R
 9fa2cf63ccd3e9723d17a18bd4a0832b *R/trans.dens.R
 8f3e4072ce73338df16ff61fadb71882 *README
-c50984e3104ba357ab046fa114442046 *man/arms.Rd
+2bd92e09ea3b908c75805134b9ddd06f *man/arms.Rd
 df31c4d99d970e4c338e21e9e3ae9c92 *man/convex.bounds.Rd
 35df843c5aa92ccf3d25849767554a49 *man/rballunif.Rd
 7a6b85f244dea59cdd9eb32a0fd826ab *man/trans.dens.Rd
 a255d69e222cf5acc26565c68935aae0 *src/arms-R.c
+7d032823f01faa281c2b03a6198a4d16 *src/register_routines.c

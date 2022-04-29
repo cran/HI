@@ -1,7 +1,7 @@
 Package: HI
-Title: Simulation from distributions supported by nested hyperplanes
-Version: 0.4
-Date: 2013-03-26
+Title: Simulation from Distributions Supported by Nested Hyperplanes
+Version: 0.5
+Date: 2022-04-15
 Author: Giovanni Petris <GPetris@Uark.edu> and Luca Tardella
         <luca.tardella@@uniroma1.it>; original C code for ARMS by Wally
         Gilks.
@@ -14,7 +14,7 @@ Description: Simulation from distributions supported by nested
         (2003).  Also random direction multivariate Adaptive Rejection
         Metropolis Sampling.
 License: GPL (>= 2)
-Packaged: 2013-03-26 15:06:35 UTC; gpetris
 NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2013-03-26 17:04:14
+Packaged: 2022-04-29 21:33:55 UTC; gpetris
+Date/Publication: 2022-04-29 22:50:15 UTC
